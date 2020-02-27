@@ -1,7 +1,7 @@
-const Book = require("../models/book.models");
+const User = require("../models/user.models");
 //Mengambil semua data buku
 exports.findAll = (req, res) => {
-    Book.getAll((err, data) => {
+    User.getAll((err, data) => {
         if (err) {
             res.status(500).send({
                 message:
@@ -13,15 +13,15 @@ exports.findAll = (req, res) => {
 
 // Mengambil buku yang memiliki id = id
 exports.findOne = (req, res) => {
-    Book.findById(req.params.id, (err, data) => {
+    User.findById(req.params.id, (err, data) => {
         if (err) {
             if (err.kind === "not_found") {
                 res.status(404).send({
-                    message: `Buku dengan id ${req.params.id} tidak ditemukan`
+                    message: `User dengan id ${req.params.id} tidak ditemukan`
                 });
             } else {
                 res.status(500).send({
-                    message: `Error ketika mengambil buku dengan id ${req.params.id}`
+                    message: `Error ketika mengambil Users dengan id ${req.params.id}`
                 });
             }
         } else {
@@ -29,6 +29,7 @@ exports.findOne = (req, res) => {
         }
     });
 };
+
 // Membuat data buku baru
 exports.create = (req, res) => {
     if (!req.body) {
@@ -36,12 +37,13 @@ exports.create = (req, res) => {
             message: "Content tidak boleh kosong"
         });
     }
-    const book = new Book({
-        title: req.body.title,
-        description: req.body.description,
+    const user = new User({
+        nama: req.body.nama,
+        email: req.body.email,
+        password: req.body.password,
         images: req.body.images
     });
-    Book.create(book, (err, data) => {
+    User.create(user, (err, data) => {
         if (err) {
             res.status(500).send({
                 message:
@@ -60,17 +62,17 @@ exports.update = (req, res) => {
             message: "Content tidak boleh kosong"
         });
     }
-    Book.updateById(
+    User.updateById(
         req.params.id,
-        new Book(req.body), (err, data) => {
+        new User(req.body), (err, data) => {
             if (err) {
                 if (err.kind === "not_found") {
                     res.status(404).send({
-                        message: `Buku dengan id ${req.params.id} tidak ditemukan`
+                        message: `user dengan id ${req.params.id} tidak ditemukan`
                     });
                 } else {
                     res.status(500).send({
-                        message: `Error ketika mengupdate buku dengan id ${req.params.id}`
+                        message: `Error ketika mengupdate user dengan id ${req.params.id}`
                     });
                 }
             } else {
@@ -81,11 +83,12 @@ exports.update = (req, res) => {
 };
 // Menghapus buku yang memiliki id = id
 exports.delete = (req, res) => {
-    Book.remove(req.params.id, (err, data) => {
+    User.remove(req.params.id, (err, data) => {
         if (err) {
             if (err.kind === "not_found") {
                 res.status(404).send({
-                    message: `Buku dengan id ${req.params.id} tidak ditemukan`
+                    message: `Users dengan id ${req.params.id} tidak
+ditemukan`
                 });
             } else {
                 res.status(500).send({
@@ -100,7 +103,7 @@ ${req.params.id}`
 };
 // Menghapus semua buku
 exports.deleteAll = (req, res) => {
-    Book.removeAll((err, data) => {
+    User.removeAll((err, data) => {
         if (err) {
             res.status(500).send({
                 message:
@@ -109,7 +112,7 @@ exports.deleteAll = (req, res) => {
         }
         else {
             res.send({
-                message: `Berhasil menghapus seluruh data buku!` });
+                message: `Berhasil menghapus seluruh data Users!` });
         }
     });
 };
